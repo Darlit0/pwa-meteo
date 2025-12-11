@@ -4,8 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Météo PWA</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="icons/icon-72.png" type="image/png">
 </head>
 <body>
-    test pour github page
+    <h1>Météo Progressive Web App</h1>
+    
+    <div>
+        <input type="text" id="city-input" placeholder="Entrez le nom d'une ville">
+        <button id="search-btn">Rechercher</button>
+    </div>
+    
+    <div id="weather-section" class="hidden">
+        <h2 id="city-name"></h2>
+        <div id="weather-icon"></div>
+        <h3><span id="temperature"></span>°C</h3>
+        <p id="feels-like"></p>
+        <p>Humidité: <span id="humidity"></span>%</p>
+        <p>Vent: <span id="wind"></span> km/h</p>
+    </div>
+    
+    <div id="loading" class="hidden">
+        <p>Chargement...</p>
+    </div>
+    
+    <div id="error-message" class="hidden"></div>
+    
+    <div id="hourly-list"></div>
+
+    <script src="app.js"></script>
 </body>
 </html>

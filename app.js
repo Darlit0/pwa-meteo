@@ -34,8 +34,17 @@ let currentCity = null;
 
 // ===== Initialisation =====
 document.addEventListener('DOMContentLoaded', () => {
+    loadTheme();
     updateNotifyButton();
     registerServiceWorker();
+    
+    // Attacher les event listeners
+    elements.searchBtn.addEventListener('click', handleSearch);
+    elements.notifyBtn.addEventListener('click', requestNotificationPermission);
+    elements.themeToggle.addEventListener('click', toggleTheme);
+    elements.cityInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') handleSearch();
+    });
 });
 
 // ===== Service Worker =====
