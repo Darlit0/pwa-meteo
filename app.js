@@ -34,17 +34,25 @@ let currentCity = null;
 
 // ===== Initialisation =====
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('🚀 App chargée');
+    console.log('Elements trouvés:', elements);
+    
     loadTheme();
     updateNotifyButton();
     registerServiceWorker();
     
     // Attacher les event listeners
-    elements.searchBtn.addEventListener('click', handleSearch);
+    elements.searchBtn.addEventListener('click', () => {
+        console.log('🔍 Bouton Rechercher cliqué');
+        handleSearch();
+    });
     elements.notifyBtn.addEventListener('click', requestNotificationPermission);
     elements.themeToggle.addEventListener('click', toggleTheme);
     elements.cityInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') handleSearch();
     });
+    
+    console.log('✅ Event listeners attachés');
 });
 
 // ===== Service Worker =====
@@ -122,11 +130,20 @@ async function requestNotificationPermission() {
 }
 
 function sendWeatherNotification(city, message, type = 'info') {
-  
+    if (Notification.permission === 'granted') {
+        new Notification('Météo PWA', {
+            body: `${city}: ${message}`,
+            icon: 'icons/icon-192.png',
+            tag: `weather-${type}`,
+            requireInteraction: false
+        });
+    }
 }
 // ===== Recherche et API Météo =====
 async function handleSearch() {
+    console.log('handleSearch appelée');
     const query = elements.cityInput.value.trim();
+    console.log('Ville recherchée:', query);
     
     if (!query) {
         showError('Veuillez entrer un nom de ville.');
@@ -138,13 +155,17 @@ async function handleSearch() {
 
     try {
         // 1. Géocodage : trouver les coordonnées de la ville
+        console.log('🌍 Appel API géocodage...');
         const geoResponse = await fetch(
             `${CONFIG.GEOCODING_API}?name=${encodeURIComponent(query)}&count=1&language=fr&format=json`
         );
         
+        console.log('Réponse géocodage:', geoResponse.status);
+        
         if (!geoResponse.ok) throw new Error('Erreur de géocodage');
         
         const geoData = await geoResponse.json();
+        console.log('Données géocodage:', geoData);
         
         if (!geoData.results || geoData.results.length === 0) {
             throw new Error(`Ville "${query}" non trouvée. Vérifiez l'orthographe.`);
@@ -152,11 +173,13 @@ async function handleSearch() {
 
         const location = geoData.results[0];
         const cityName = `${location.name}${location.admin1 ? ', ' + location.admin1 : ''}, ${location.country}`;
+        console.log('Ville trouvée:', cityName);
         
         // 2. Récupérer la météo
         await fetchWeather(location.latitude, location.longitude, cityName);
         
     } catch (error) {
+        console.error('❌ Erreur:', error);
         hideLoading();
         showError(error.message);
     }
@@ -339,3 +362,97 @@ function showError(message) {
 function hideError() {
     elements.errorMessage.classList.add('hidden');
 }
+
+// ===== Thème =====
+function toggleTheme() {
+    const htmlElement = document.documentElement;
+    const currentTheme = htmlElement.getAttribute('data-theme') || 'light';
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    
+    htmlElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem(CONFIG.STORAGE_KEY_THEME, newTheme);
+    
+    elements.themeToggle.textContent = newTheme === 'dark' ? '☀️ Thème' : '🌙 Thème';
+}
+
+function loadTheme() {
+    const savedTheme = localStorage.getItem(CONFIG.STORAGE_KEY_THEME) || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    elements.themeToggle.textContent = savedTheme === 'dark' ? '☀️ Thème' : '🌙 Thème';
+}
+
+// ===== Favoris =====
+function loadFavorites() {
+    const favoritesJSON = localStorage.getItem(CONFIG.STORAGE_KEY_FAVORITES);
+    return favoritesJSON ? JSON.parse(favoritesJSON) : [];
+}
+
+function saveFavorites(favorites) {
+    localStorage.setItem(CONFIG.STORAGE_KEY_FAVORITES, JSON.stringify(favorites));
+}
+
+function addToFavorites() {
+    if (!currentCity) {
+        showError('Veuillez d\'abord rechercher une ville.');
+        return;
+    }
+
+    const favorites = loadFavorites();
+    const isFavorite = favorites.some(fav => fav.lat === currentCity.lat && fav.lon === currentCity.lon);
+
+    if (isFavorite) {
+        showError('Cette ville est déjà dans vos favoris.');
+        return;
+    }
+
+    favorites.push(currentCity);
+    saveFavorites(favorites);
+    updateFavoritesList();
+    elements.favoriteBtn.textContent = '✅ Ajouté aux favoris';
+    
+    setTimeout(() => {
+        elements.favoriteBtn.textContent = '⭐ Ajouter aux favoris';
+    }, 2000);
+}
+
+function updateFavoritesList() {
+    const favorites = loadFavorites();
+    elements.favoritesList.innerHTML = '';
+
+    if (favorites.length === 0) {
+        elements.favoritesList.innerHTML = '<li style="font-style: italic; color: #999;">Aucun favori pour le moment</li>';
+        return;
+    }
+
+    favorites.forEach((city, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="cursor: pointer; flex: 1;" onclick="selectFavorite(${index})">${city.name}</span>
+                <button onclick="removeFavorite(${index})" style="background-color: #f44336; padding: 0.5rem 1rem; font-size: 0.8rem;">✕</button>
+            </div>
+        `;
+        elements.favoritesList.appendChild(li);
+    });
+}
+
+function selectFavorite(index) {
+    const favorites = loadFavorites();
+    if (favorites[index]) {
+        const fav = favorites[index];
+        fetchWeather(fav.lat, fav.lon, fav.name);
+    }
+}
+
+function removeFavorite(index) {
+    const favorites = loadFavorites();
+    favorites.splice(index, 1);
+    saveFavorites(favorites);
+    updateFavoritesList();
+}
+
+// ===== Initialisation des Favoris au chargement =====
+window.addEventListener('load', () => {
+    updateFavoritesList();
+    elements.favoriteBtn.addEventListener('click', addToFavorites);
+});

@@ -6,6 +6,7 @@
     <title>Météo PWA</title>
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="icons/icon-72.png" type="image/png">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1>Météo Progressive Web App</h1>
@@ -13,6 +14,8 @@
     <div>
         <input type="text" id="city-input" placeholder="Entrez le nom d'une ville">
         <button id="search-btn">Rechercher</button>
+        <button id="theme-toggle">🌙 Thème</button>
+        <button id="notify-btn">🔔 Notifications</button>
     </div>
     
     <div id="weather-section" class="hidden">
@@ -22,6 +25,7 @@
         <p id="feels-like"></p>
         <p>Humidité: <span id="humidity"></span>%</p>
         <p>Vent: <span id="wind"></span> km/h</p>
+        <button id="favorite-btn">⭐ Ajouter aux favoris</button>
     </div>
     
     <div id="loading" class="hidden">
@@ -31,6 +35,11 @@
     <div id="error-message" class="hidden"></div>
     
     <div id="hourly-list"></div>
+    
+    <div id="favorites-section">
+        <h2>Favoris</h2>
+        <ul id="favorites-list"></ul>
+    </div>
 
     <script src="app.js"></script>
 </body>

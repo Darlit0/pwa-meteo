@@ -1,0 +1,337 @@
+/* ===== Variables CSS ===== */
+:root {
+    --primary-color: #6200ea;
+    --secondary-color: #d5c3d9;
+    --bg-light: #ffffff;
+    --bg-dark: #1e1e1e;
+    --text-light: #333333;
+    --text-dark: #f0f0f0;
+    --border-color: #cccccc;
+    --success-color: #4caf50;
+    --warning-color: #ff9800;
+    --danger-color: #f44336;
+    --padding: 1rem;
+    --border-radius: 8px;
+    --transition: all 0.3s ease;
+}
+
+/* ===== Thème Sombre ===== */
+[data-theme="dark"] {
+    --bg-light: #1e1e1e;
+    --text-light: #f0f0f0;
+    --border-color: #444444;
+}
+
+/* ===== Reset et Base ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-light);
+    line-height: 1.6;
+    transition: var(--transition);
+    padding: var(--padding);
+}
+
+/* ===== Conteneur Principal ===== */
+body > div:first-of-type {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* ===== Titres ===== */
+h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: var(--primary-color);
+    font-size: 2rem;
+}
+
+h2 {
+    font-size: 1.5rem;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+}
+
+h3 {
+    font-size: 2.5rem;
+    margin: 1rem 0;
+    text-align: center;
+}
+
+/* ===== Entrées et Boutons ===== */
+input[type="text"] {
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    background-color: var(--bg-light);
+    color: var(--text-light);
+    transition: var(--transition);
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(98, 0, 234, 0.1);
+}
+
+button {
+    padding: 0.75rem 1.5rem;
+    margin: 0.5rem;
+    margin-left: 0;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    background-color: var(--primary-color);
+    color: white;
+    transition: var(--transition);
+}
+
+button:hover {
+    background-color: #4a148c;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(98, 0, 234, 0.3);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* ===== Div de Recherche ===== */
+body > div:nth-of-type(1) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+body > div:nth-of-type(1) > button {
+    margin: 0.5rem 0;
+}
+
+/* ===== Section Météo ===== */
+#weather-section {
+    background: linear-gradient(135deg, var(--secondary-color), rgba(98, 0, 234, 0.1));
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    margin: 2rem 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+#weather-section.hidden {
+    display: none;
+}
+
+#city-name {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+#weather-icon {
+    font-size: 3rem;
+    text-align: center;
+    margin: 1rem 0;
+}
+
+#weather-section p {
+    font-size: 1.1rem;
+    margin: 0.5rem 0;
+}
+
+#feels-like {
+    font-style: italic;
+    color: var(--warning-color);
+}
+
+/* ===== Loading ===== */
+#loading {
+    text-align: center;
+    padding: 2rem;
+    font-size: 1.2rem;
+}
+
+#loading.hidden {
+    display: none;
+}
+
+#loading p {
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* ===== Message d'Erreur ===== */
+#error-message {
+    background-color: var(--danger-color);
+    color: white;
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    margin: 1rem 0;
+    text-align: center;
+}
+
+#error-message.hidden {
+    display: none;
+}
+
+/* ===== Liste Horaire ===== */
+#hourly-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.hourly-item {
+    background-color: var(--secondary-color);
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: var(--transition);
+}
+
+.hourly-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.hourly-time {
+    font-weight: bold;
+    font-size: 0.9rem;
+    color: var(--primary-color);
+}
+
+.hourly-icon {
+    font-size: 2rem;
+    margin: 0.5rem 0;
+}
+
+.hourly-temp {
+    font-size: 1rem;
+}
+
+/* ===== Alertes ===== */
+.rain-alert {
+    background-color: #e3f2fd;
+    border-left: 4px solid #2196f3;
+}
+
+.temp-alert {
+    background-color: #fff3e0;
+    border-left: 4px solid #ff9800;
+}
+
+[data-theme="dark"] .rain-alert {
+    background-color: #1a237e;
+    border-left: 4px solid #64b5f6;
+}
+
+[data-theme="dark"] .temp-alert {
+    background-color: #4a2511;
+    border-left: 4px solid #ffb74d;
+}
+
+/* ===== Bouton Favori ===== */
+#favorite-btn {
+    background-color: var(--success-color);
+    width: 100%;
+    margin-top: 1rem;
+}
+
+#favorite-btn:hover {
+    background-color: #388e3c;
+}
+
+/* ===== Section Favoris ===== */
+#favorites-section {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 2px solid var(--border-color);
+}
+
+#favorites-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+#favorites-list li {
+    background-color: var(--secondary-color);
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+#favorites-list li:hover {
+    background-color: var(--primary-color);
+    color: white;
+    transform: translateX(4px);
+}
+
+#favorites-list li:empty::before {
+    content: "Aucun favori pour le moment";
+    color: var(--border-color);
+    font-style: italic;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    h3 {
+        font-size: 2rem;
+    }
+
+    body > div:nth-of-type(1) {
+        flex-direction: column;
+    }
+
+    body > div:nth-of-type(1) > button {
+        width: 100%;
+    }
+
+    #hourly-list {
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    }
+
+    #weather-section {
+        padding: 1rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
