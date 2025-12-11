@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('Elements trouvés:', elements);
     
     loadTheme();
+    listenToSystemTheme();
     updateNotifyButton();
     registerServiceWorker();
     
@@ -376,9 +377,35 @@ function toggleTheme() {
 }
 
 function loadTheme() {
-    const savedTheme = localStorage.getItem(CONFIG.STORAGE_KEY_THEME) || 'light';
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    elements.themeToggle.textContent = savedTheme === 'dark' ? '☀️ Thème' : '🌙 Thème';
+    // Chercher le thème sauvegardé
+    const savedTheme = localStorage.getItem(CONFIG.STORAGE_KEY_THEME);
+    
+    let themeToUse = savedTheme;
+    
+    // Si aucun thème sauvegardé, utiliser les préférences du système
+    if (!savedTheme) {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        themeToUse = prefersDark ? 'dark' : 'light';
+    }
+    
+    document.documentElement.setAttribute('data-theme', themeToUse);
+    elements.themeToggle.textContent = themeToUse === 'dark' ? '☀️ Thème' : '🌙 Thème';
+}
+
+// Écouter les changements de préférence système
+function listenToSystemTheme() {
+    const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    
+    darkModeQuery.addEventListener('change', (e) => {
+        const isSavedTheme = localStorage.getItem(CONFIG.STORAGE_KEY_THEME);
+        
+        // Si l'utilisateur n'a pas forcé un thème, appliquer la préférence système
+        if (!isSavedTheme) {
+            const newTheme = e.matches ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            elements.themeToggle.textContent = newTheme === 'dark' ? '☀️ Thème' : '🌙 Thème';
+        }
+    });
 }
 
 // ===== Favoris =====

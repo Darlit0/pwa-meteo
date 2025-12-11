@@ -1,6 +1,11 @@
 {
-    "short_name": "Météo",
+    "short_name": "Darlito App",
     "name": "Météo Progressive Web App",
+    "description": "Application météo progressive avec prévisions en temps réel",
+    "author": {
+        "name": "Darlito",
+        "url": "https://github.com/Darlit0"
+    },
     "icons": [
         {
             "src": "icons/icon-192.png",
@@ -20,5 +25,7 @@
     "orientation": "portrait-primary",
     "background_color": "#d5c3d9",
     "theme_color": "#6200ea",
-    "lang": "fr"
+    "lang": "fr",
+    "categories": ["weather"],
+    "dir": "ltr"
 }

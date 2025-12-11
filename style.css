@@ -22,6 +22,15 @@
     --border-color: #444444;
 }
 
+/* ===== Détection Système (iOS/Android) ===== */
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --bg-light: #1e1e1e;
+        --text-light: #f0f0f0;
+        --border-color: #444444;
+    }
+}
+
 /* ===== Reset et Base ===== */
 * {
     margin: 0;
