@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     elements.notifyBtn.addEventListener('click', requestNotificationPermission);
     elements.themeToggle.addEventListener('click', toggleTheme);
-    elements.cityInput.addEventListener('keypress', (e) => {
+    elements.cityInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') handleSearch();
     });
     
